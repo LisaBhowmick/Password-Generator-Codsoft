@@ -11,37 +11,52 @@ class GUI():
         self.generatedpassword = StringVar()
 
         root.title('Password Generator')
-        root.geometry('600x300')
-        root.configure(bg='#1F1F1F')
+        root.geometry('550x220')
+        root.configure(bg='#FFF5E1')  # Light pastel background
         root.resizable(False, False)
 
         style = ttk.Style()
-        style.configure("TLabel", foreground="#E0E0E0", background="#1F1F1F", font=("Segoe UI", 12))
-        style.configure("TEntry", font=("Segoe UI", 12))
-        style.configure("TButton", font=("Segoe UI", 11, "bold"), padding=6)
-        style.map("TButton", background=[("active", "#2E8B57")])
+        style.theme_use("default")
 
-        self.title_label = Label(text="Password Generator", font=("Segoe UI", 18, "bold"), bg="#1F1F1F", fg="#00CED1")
-        self.title_label.pack(pady=(20, 10))
+        # Light cartoony theme
+        style.configure("TLabel", foreground="#444444", background="#FFF5E1", font=("Comic Sans MS", 12, "bold"))
+        style.configure("TEntry", padding=6, font=("Comic Sans MS", 11))
+        style.configure("TButton",
+                        font=("Comic Sans MS", 11, "bold"),
+                        padding=6,
+                        background="#FF91A4",
+                        foreground="white")
+        style.map("TButton", background=[("active", "#FF6F91")])
 
-        self.length_label = ttk.Label(root, text="Password Length:")
-        self.length_label.pack()
-        self.length_entry = ttk.Entry(root, textvariable=self.passwordlen, width=30)
-        self.length_entry.pack(pady=5)
+        # Title
+        self.title_label = Label(text="Password Generator", 
+                                 font=("Comic Sans MS", 18, "bold"), 
+                                 bg="#FFF5E1", fg="#FF6F91")
+        self.title_label.pack(pady=(15, 10))
 
-        self.generated_label = ttk.Label(root, text="Generated Password:")
-        self.generated_label.pack()
-        self.generated_entry = ttk.Entry(root, textvariable=self.generatedpassword, width=30, foreground="#DC143C")
-        self.generated_entry.pack(pady=5)
+        # Control frame
+        control_frame = Frame(root, bg="#FFF5E1")
+        control_frame.pack(pady=5, fill="x")
 
-        self.button_frame = Frame(root, bg="#1F1F1F")
-        self.button_frame.pack(pady=20)
+        self.length_label = ttk.Label(control_frame, text="🔢 Length:")
+        self.length_label.grid(row=0, column=0, padx=5)
+        self.length_entry = ttk.Entry(control_frame, textvariable=self.passwordlen, width=8)
+        self.length_entry.grid(row=0, column=1, padx=5)
 
-        self.generate_btn = ttk.Button(self.button_frame, text="Generate Password", command=self.generate_pass)
-        self.generate_btn.grid(row=0, column=0, padx=5)
+        self.generate_btn = ttk.Button(control_frame, text="✨ Generate", command=self.generate_pass)
+        self.generate_btn.grid(row=0, column=2, padx=5)
 
-        self.reset_btn = ttk.Button(self.button_frame, text="Reset", command=self.reset_fields)
-        self.reset_btn.grid(row=0, column=1, padx=5)
+        self.reset_btn = ttk.Button(control_frame, text="🧹 Reset", command=self.reset_fields)
+        self.reset_btn.grid(row=0, column=3, padx=5)
+
+        # Output frame
+        output_frame = Frame(root, bg="#FFF5E1")
+        output_frame.pack(pady=15, fill="x")
+
+        self.generated_label = ttk.Label(output_frame, text="🔒 Your Password:")
+        self.generated_label.grid(row=0, column=0, padx=5)
+        self.generated_entry = ttk.Entry(output_frame, textvariable=self.generatedpassword, width=30, foreground="#B8336A")
+        self.generated_entry.grid(row=0, column=1, padx=5)
 
     def generate_pass(self):
         upper = list(string.ascii_uppercase)
@@ -52,11 +67,11 @@ class GUI():
         try:
             length = int(self.passwordlen.get())
         except ValueError:
-            messagebox.showerror("Error", "Password length must be a number.")
+            messagebox.showerror("Oops!", "Length must be a number")
             return
 
         if length < 6:
-            messagebox.showerror("Error", "Password must be at least 6 characters long.")
+            messagebox.showerror("Too Short!", "Password must be at least 6 characters 💡")
             return
 
         u = random.randint(1, length - 3)
@@ -84,4 +99,3 @@ if __name__ == '__main__':
     root = Tk()
     pass_gen = GUI(root)
     root.mainloop()
-
